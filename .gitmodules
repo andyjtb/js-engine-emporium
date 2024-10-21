@@ -1,0 +1,42 @@
+[submodule "engines/quickjs-ng"]
+	path = engines/quickjs-ng
+	url = https://github.com/quickjs-ng/quickjs.git
+[submodule "engines/quickjs"]
+	path = engines/quickjs
+	url = https://github.com/bellard/quickjs.git
+[submodule "engines/escargot"]
+	path = engines/escargot
+	url = https://github.com/Samsung/escargot.git
+[submodule "engines/duktape"]
+	path = engines/duktape
+	url = https://github.com/svaarala/duktape.git
+[submodule "engines/ChakraCore"]
+	path = engines/ChakraCore
+	url = https://github.com/chakra-core/ChakraCore.git
+[submodule "engines/hermes"]
+	path = engines/hermes
+	url = https://github.com/facebook/hermes.git
+[submodule "engines/static-hermes"]
+	path = engines/static-hermes
+	url = https://github.com/facebook/hermes.git
+[submodule "engines/jerryscript"]
+	path = engines/jerryscript
+	url = https://github.com/jerryscript-project/jerryscript.git
+[submodule "engines/JUCE"]
+	path = engines/JUCE
+	url = https://github.com/juce-framework/JUCE.git
+[submodule "engines/v8-cmake"]
+	path = engines/v8-cmake
+	url = https://github.com/bnoordhuis/v8-cmake.git
+[submodule "wrappers/dukglue"]
+	path = wrappers/dukglue
+	url = https://github.com/Aloshi/dukglue.git
+[submodule "wrappers/ScriptX"]
+	path = wrappers/ScriptX
+	url = https://github.com/andyjtb/ScriptX.git
+[submodule "wrappers/v8-jsi"]
+	path = wrappers/v8-jsi
+	url = https://github.com/microsoft/v8-jsi.git
+[submodule "test262_harness_cpp"]
+	path = test262_harness_cpp
+	url = https://github.com/Izhido/test262_harness_cpp.git
