@@ -12,6 +12,8 @@ add_subdirectory(ChakraCore)
 set(ESCARGOT_OUTPUT "static_lib")
 add_subdirectory(escargot)
 
+add_subdirectory(jerryscript)
+
 add_subdirectory(quickjs-ng)
 
 include(add_quickjs.cmake)
@@ -22,3 +24,6 @@ if (WITH_STATIC_HERMES)
 else()
     add_subdirectory(hermes)
 endif ()
+
+include(add_duktape.cmake)
+add_duktape(${CMAKE_CURRENT_LIST_DIR}/duktape)
