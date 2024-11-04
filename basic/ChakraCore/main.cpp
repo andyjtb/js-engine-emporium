@@ -64,7 +64,7 @@ int main()
     FAIL_CHECK(JsCopyString(resultJSString, resultSTR, stringLength + 1, nullptr));
     resultSTR[stringLength] = 0;
 
-    printf("Result -> %s \n", resultSTR);
+    printf("%s \n", resultSTR);
     free(resultSTR);
 
     // Dispose runtime

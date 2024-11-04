@@ -40,3 +40,9 @@
 [submodule "test262_harness_cpp"]
 	path = test262_harness_cpp
 	url = https://github.com/Izhido/test262_harness_cpp.git
+[submodule "wrappers/choc"]
+	path = wrappers/choc
+	url = https://github.com/Tracktion/choc.git
+[submodule "Catch2"]
+	path = Catch2
+	url = https://github.com/catchorg/Catch2.git

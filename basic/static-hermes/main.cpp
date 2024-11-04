@@ -3,7 +3,7 @@
 
 /// JS code to be executed.
 static const char *code = R"(
-    print("Hello, World!");
+    "Hello, " + "World!";
 )";
 
 int main()
@@ -18,7 +18,8 @@ int main()
   int status = 0;
   try
   {
-    runtime->evaluateJavaScript(std::make_unique<facebook::jsi::StringBuffer>(code), "main.js");
+    auto res = runtime->evaluateJavaScript(std::make_unique<facebook::jsi::StringBuffer>(code), "main.js");
+    std::cout << res.toString(*runtime).utf8(*runtime) << '\n';
   }
   catch (facebook::jsi::JSError &e)
   {

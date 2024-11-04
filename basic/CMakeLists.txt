@@ -6,6 +6,7 @@ add_subdirectory(JUCE7)
 add_subdirectory(JUCE8)
 add_subdirectory(quickjs)
 add_subdirectory(quickjs-ng)
+
 add_subdirectory(v8)
 
 if (WITH_STATIC_HERMES)
@@ -13,3 +14,5 @@ if (WITH_STATIC_HERMES)
 else()
     add_subdirectory(hermes)
 endif ()
+
+add_subdirectory(wrapped)
