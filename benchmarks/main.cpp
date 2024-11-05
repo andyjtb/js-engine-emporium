@@ -5,9 +5,12 @@
 #include <duktape/engine.h>
 #include <Escargot/engine.h>
 #include <hermes/engine.h>
+#include <JavascriptCore/engine.h>
 #include <jerryscript/engine.h>
 #include <quickjs/engine.h>
+#if WITH_V8
 #include <v8/engine.h>
+#endif
 
 #include <juce_core/juce_core.h>
 
@@ -15,12 +18,13 @@
 
 TEST_CASE("Hello Benchmark")
 {
+#if WITH_V8
     v8::V8::InitializeICUDefaultLocation(nullptr);
     v8::V8::InitializeExternalStartupData(nullptr);
     std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
     v8::V8::InitializePlatform(platform.get());
     v8::V8::Initialize();
-
+#endif
     const auto code = "10 + 10";
     const auto codeLength = strlen(code);
 
@@ -93,6 +97,16 @@ TEST_CASE("Hello Benchmark")
         REQUIRE (res.asNumber() == 20);
     };
 
+    BENCHMARK("JavascriptCore")
+    {
+        JavascriptCore::Engine engine;
+        JSStringRef script = JSStringCreateWithUTF8CString("10 + 10");
+        JSValueRef result = JSEvaluateScript(engine.context, script, nullptr, nullptr, 0, nullptr);
+
+        REQUIRE(JSValueToNumber(engine.context, result, NULL) == 20);
+        JSStringRelease(script);
+    };
+
     BENCHMARK("Jerryscript")
     {
         JerryScript::Engine engine;
@@ -124,6 +138,7 @@ TEST_CASE("Hello Benchmark")
         REQUIRE(resUint == 20);
     };
 
+#if WITH_V8
     BENCHMARK("v8")
     {
         v8::Isolate::CreateParams create_params;
@@ -155,4 +170,5 @@ TEST_CASE("Hello Benchmark")
 
     v8::V8::Dispose();
     v8::V8::DisposePlatform();
+#endif
 }

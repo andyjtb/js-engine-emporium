@@ -1,5 +1,3 @@
-add_definitions("-DV8_ENABLE_TURBOFAN")
-
 if (WITH_V8)
     add_subdirectory(v8-cmake)
 endif()

@@ -7,6 +7,7 @@ add_subdirectory(JUCE8)
 add_subdirectory(quickjs)
 add_subdirectory(quickjs-ng)
 
+add_subdirectory(JavascriptCore)
 add_subdirectory(v8)
 
 if (WITH_STATIC_HERMES)

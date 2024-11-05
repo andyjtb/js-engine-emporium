@@ -27,7 +27,7 @@
 	url = https://github.com/juce-framework/JUCE.git
 [submodule "engines/v8-cmake"]
 	path = engines/v8-cmake
-	url = https://github.com/bnoordhuis/v8-cmake.git
+	url = https://github.com/andyjtb/v8-cmake.git
 [submodule "wrappers/dukglue"]
 	path = wrappers/dukglue
 	url = https://github.com/Aloshi/dukglue.git

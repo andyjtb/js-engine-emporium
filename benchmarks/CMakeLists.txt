@@ -19,7 +19,14 @@ target_link_libraries(benchmarks PRIVATE
     jerry-port
 )
 
+if (APPLE)
+    target_link_libraries(benchmarks PUBLIC "-framework JavaScriptCore")
+endif()
+
 if (WITH_V8)
+    target_compile_definitions(benchmarks PUBLIC
+        WITH_V8=1
+    )
     target_link_libraries(benchmarks PRIVATE
         v8_base_without_compiler
         v8_compiler
