@@ -2,23 +2,39 @@
 #include <catch2/benchmark/catch_benchmark_all.hpp>
 
 #include <ChakraCore/engine.h>
-#include <duktape/engine.h>
+
 #include <Escargot/engine.h>
 #include <hermes/engine.h>
 #include <JavascriptCore/engine.h>
 #include <jerryscript/engine.h>
+#include <juce_core/juce_core.h>
+#include "juce_Javascript.h"
+
+#include "ScriptX/ScriptX.h"
+
+#if WITH_CHOC_DUKTAPE
+#include "choc_javascript_Duktape.h"
+#else
+#include <duktape/engine.h>
+#endif
+
+#if WITH_CHOC_QUICKJS
+#include "choc_javascript_QuickJS.h"
+#else
 #include <quickjs/engine.h>
+#endif
+
 #if WITH_V8
 #include <v8/engine.h>
 #endif
 
-#include <juce_core/juce_core.h>
-
-#include "juce_Javascript.h"
+#if WITH_CHOC_V8
+#include "choc_javascript_V8.h"
+#endif
 
 TEST_CASE("Hello Benchmark")
 {
-#if WITH_V8
+#if WITH_V8 && ! WITH_CHOC_V8
     v8::V8::InitializeICUDefaultLocation(nullptr);
     v8::V8::InitializeExternalStartupData(nullptr);
     std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
@@ -37,7 +53,7 @@ TEST_CASE("Hello Benchmark")
 
         unsigned currentSourceContext = 0;
         JsValueRef fname;
-        JsCreateString("sample", strlen("sample"), &fname);
+        JsCreateString("b", strlen("b"), &fname);
 
         JsValueRef res;
         JsRun(scriptSource, currentSourceContext++, fname, JsParseScriptAttributeNone, &res);
@@ -45,15 +61,6 @@ TEST_CASE("Hello Benchmark")
         int resNum = 0;
         JsNumberToInt(res, &resNum);
         REQUIRE (resNum == 20);
-    };
-
-    BENCHMARK("Duktape")
-    {
-        Duktape::Engine engine;
-        duk_eval_string(engine.ctx, code);
-
-        auto res = duk_get_int (engine.ctx, -1);
-        REQUIRE (res == 20);
     };
 
     BENCHMARK("Escargot")
@@ -128,6 +135,34 @@ TEST_CASE("Hello Benchmark")
         REQUIRE((int) res == 20);
     };
 
+#if WITH_CHOC_DUKTAPE
+    BENCHMARK("Choc Duktape")
+    {
+        auto ctx = choc::javascript::createDuktapeContext();
+        const auto result = ctx.evaluateExpression("10 + 10");
+
+        REQUIRE((double) result == 20);
+    };
+#else
+    BENCHMARK("Duktape")
+    {
+        Duktape::Engine engine;
+        duk_eval_string(engine.ctx, code);
+
+        auto res = duk_get_int (engine.ctx, -1);
+        REQUIRE (res == 20);
+    };
+#endif
+
+#if WITH_CHOC_QUICKJS
+    BENCHMARK("Choc Quickjs")
+    {
+        auto ctx = choc::javascript::createQuickJSContext();
+        const auto result = ctx.evaluateExpression("10 + 10");
+
+        REQUIRE((double) result == 20);
+    };
+#else
     BENCHMARK("QuickJS")
     {
         QuickJS::Engine engine;
@@ -137,8 +172,19 @@ TEST_CASE("Hello Benchmark")
 
         REQUIRE(resUint == 20);
     };
+#endif
 
-#if WITH_V8
+#if WITH_CHOC_V8
+    BENCHMARK("Choc V8")
+    {
+        auto ctx = choc::javascript::createV8Context();
+        const auto result = ctx.evaluateExpression("10 + 10");
+
+        REQUIRE((int) result == 20);
+    };
+#endif
+
+#if WITH_V8 && ! WITH_CHOC_V8
     BENCHMARK("v8")
     {
         v8::Isolate::CreateParams create_params;
@@ -170,5 +216,27 @@ TEST_CASE("Hello Benchmark")
 
     v8::V8::Dispose();
     v8::V8::DisposePlatform();
+#endif
+
+#ifdef SCRIPTX_BACKEND_QUICKJS
+    BENCHMARK("ScriptX QuickJS")
+    {
+        auto engine = std::shared_ptr<script::ScriptEngine> { new script::ScriptEngineImpl(), script::ScriptEngine::Deleter() };
+
+        script::EngineScope scope (engine.get());
+
+        const auto res = engine->eval(code);
+        REQUIRE(res.asNumber().toInt32() == 20);
+    };
+
+    BENCHMARK("ScriptX QuickJS No Copy")
+    {
+        auto engine = std::shared_ptr<script::ScriptEngine> { new script::ScriptEngineImpl(), script::ScriptEngine::Deleter() };
+
+        script::EngineScope scope (engine.get());
+
+        const auto res = engine->evalInPlace(code, codeLength, {});
+        REQUIRE(res.asNumber().toInt32() == 20);
+    };
 #endif
 }

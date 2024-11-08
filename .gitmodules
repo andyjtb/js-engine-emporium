@@ -15,10 +15,10 @@
 	url = https://github.com/chakra-core/ChakraCore.git
 [submodule "engines/hermes"]
 	path = engines/hermes
-	url = https://github.com/facebook/hermes.git
+	url = https://github.com/andyjtb/hermes.git
 [submodule "engines/static-hermes"]
 	path = engines/static-hermes
-	url = https://github.com/facebook/hermes.git
+	url = https://github.com/andyjtb/hermes.git
 [submodule "engines/jerryscript"]
 	path = engines/jerryscript
 	url = https://github.com/jerryscript-project/jerryscript.git
@@ -46,3 +46,6 @@
 [submodule "Catch2"]
 	path = Catch2
 	url = https://github.com/catchorg/Catch2.git
+[submodule "wrappers/JavascriptCorePP"]
+	path = wrappers/JavascriptCorePP
+	url = https://github.com/Superxwolf/JavascriptCorePP.git

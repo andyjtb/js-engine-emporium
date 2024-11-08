@@ -16,11 +16,13 @@ if ($CACHE{SCRIPTX_BACKEND} STREQUAL "JavaScriptCore")
         SCRIPTX_BACKEND_TRAIT_PREFIX=../backend/JavaScriptCore/trait/Trait
     )
 elseif ($CACHE{SCRIPTX_BACKEND} STREQUAL "QuickJs")
-    if(TARGET qjs)
-        target_compile_definitions(ScriptX PUBLIC
+    if(WITH_QUICKJSNG)
+        target_compile_definitions(ScriptX PRIVATE
             QUICKJS_NG=1
         )
-        target_link_libraries(ScriptX PUBLIC qjs)
+        target_link_libraries(ScriptX PRIVATE qjs)
+    else()
+        target_link_libraries(ScriptX PRIVATE quickjs)
     endif ()
 
     target_compile_definitions(ScriptX PUBLIC
@@ -35,5 +37,21 @@ elseif (WITH_V8 AND $CACHE{SCRIPTX_BACKEND} STREQUAL "V8")
     )
     target_compile_definitions(ScriptX PUBLIC
         SCRIPTX_BACKEND_TRAIT_PREFIX=../backend/V8/trait/Trait
+    )
+elseif ($CACHE{SCRIPTX_BACKEND} STREQUAL "Hermes")
+    set(HERMES_SRC_DIR ${PROJECT_SOURCE_DIR}/engines/hermes)
+    target_include_directories(ScriptX SYSTEM PUBLIC "${HERMES_SRC_DIR}/API")
+    target_include_directories(ScriptX SYSTEM PUBLIC "${HERMES_SRC_DIR}/API/jsi")
+    target_include_directories(ScriptX SYSTEM PUBLIC "${HERMES_SRC_DIR}/public")
+    if (TARGET hermesvm_a)
+        set(hermes_lib hermesvm_a)
+    else()
+        set(hermes_lib libhermes)
+    endif()
+
+    target_link_libraries(ScriptX PRIVATE ${hermes_lib})
+
+    target_compile_definitions(ScriptX PUBLIC
+        SCRIPTX_BACKEND_TRAIT_PREFIX=../backend/Hermes/trait/Trait
     )
 endif()

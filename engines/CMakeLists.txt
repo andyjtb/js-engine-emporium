@@ -12,10 +12,13 @@ add_subdirectory(escargot)
 
 add_subdirectory(jerryscript)
 
-add_subdirectory(quickjs-ng)
-
-include(add_quickjs.cmake)
-add_quickjs(quickjs)
+if (WITH_QUICKJSNG)
+    set(BUILD_QJS_LIBC ON)
+    add_subdirectory(quickjs-ng)
+else()
+    include(add_quickjs.cmake)
+    add_quickjs(quickjs)
+endif()
 
 if (WITH_STATIC_HERMES)
     add_subdirectory(static-hermes)

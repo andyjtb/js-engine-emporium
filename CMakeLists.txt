@@ -7,6 +7,6 @@ add_subdirectory(engines)
 add_subdirectory(wrappers)
 
 add_subdirectory(Catch2)
-add_subdirectory(benchmarks)
 
 add_subdirectory(basic)
+add_subdirectory(benchmarks)
